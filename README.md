@@ -12,4 +12,5 @@
  - [x] Dynamic navigation
  - [X] Dynamic catalog
  - [X] Dynamic home latest games
- - [ ] Dynamic details page
+ - [X] Dynamic details page
+ - [X] Delete game

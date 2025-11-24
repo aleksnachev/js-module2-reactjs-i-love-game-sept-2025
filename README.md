@@ -17,3 +17,4 @@
 
 ## Bonus
  - [X] Add Game
+ - [X] Requester

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { Link, useNavigate, useParams } from "react-router"
+import CreateComment from "./create-comment/CreateComment.jsx"
 
 const baseUrl = 'http://localhost:3030/jsonstore/games'
 
@@ -90,13 +91,8 @@ export default function Details() {
                 </div>
             </div>
             {/* Add Comment ( Only for logged-in users, which is not creators of the current game ) */}
-            <article className="create-comment">
-                <label>Add new comment:</label>
-                <form className="form">
-                    <textarea name="comment" placeholder="Comment......" defaultValue={""} />
-                    <input className="btn submit" type="submit" defaultValue="Add Comment" />
-                </form>
-            </article>
+
+            <CreateComment/>
         </section>
 
     )

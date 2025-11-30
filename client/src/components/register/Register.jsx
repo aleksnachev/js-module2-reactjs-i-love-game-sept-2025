@@ -5,6 +5,17 @@ export default function Register() {
         const confirmPassword = formData.get('confirm-password')
 
         //TODO: Validation
+        if (!email || !password){
+            return alert('Email and password are required')
+        }
+
+        if (password !== confirmPassword){
+            return alert('Password missmatch')
+        }
+
+        //TODO: Register User
+
+        //TODO: Redirect to home page 
         
 
     }

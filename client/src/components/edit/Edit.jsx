@@ -1,17 +1,18 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { useParams } from "react-router"
+import request from "../../utils/request.js"
+const initialValues = {
+    title: '',
+    genre: '',
+    players: '',
+    date: '',
+    imageUrl: '',
+    summary: '',
+}
 
 export default function Edit() {
-
-    const initialValues = {
-        title: '',
-        genre: '',
-        players: '',
-        date: '',
-        imageUrl: '',
-        summary: '',
-    }
-
-    const [values,setValues] = useState(initialValues)
+    const {gameId} = useParams()
+    const [values, setValues] = useState(initialValues)
 
     const changeHandler = (e) => {
         setValues((state) => ({
@@ -19,6 +20,16 @@ export default function Edit() {
             [e.target.name]: e.target.value
         }))
     }
+
+    useEffect(() => {
+        request(`http://localhost:3030/jsonstore/games/${gameId}`)
+            .then(result => {
+                setValues(result)
+            })
+            .catch(err => {
+                alert(err.message)
+            })
+    }, [gameId])
     return (
         <section id="edit-page">
             <form id="add-new-game">
@@ -60,10 +71,10 @@ export default function Edit() {
                     </div>
                     <div className="form-group-half">
                         <label htmlFor="releaseDate">Release Date:</label>
-                        <input 
-                            type="date" 
-                            id="releaseDate" 
-                            name="date" 
+                        <input
+                            type="date"
+                            id="releaseDate"
+                            name="date"
                             onChange={changeHandler}
                             value={values.date}
                         />

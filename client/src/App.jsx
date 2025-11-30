@@ -17,8 +17,10 @@ function App() {
         if (registeredUsers.some(user => user.email === email)){
             throw new Error('Email already exists!')
         }
-        setRegisteredUsers((state) => [...state,{email,password}])
-        //TODO: Login user after register
+        const newUser = {email,password}
+        setRegisteredUsers((state) => [...state, newUser])
+        //Login user after register
+        setUser(newUser)
     }
 
     const loginHandler = (email,password) => {

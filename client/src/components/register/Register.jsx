@@ -1,10 +1,16 @@
-export default function Register() {
+
+export default function Register({
+    user,
+    onRegister,
+}) {
+
+
     const registerSubmit = (formData) => {
         const email = formData.get('email')
         const password = formData.get('password')
         const confirmPassword = formData.get('confirm-password')
 
-        //TODO: Validation
+        //Validation
         if (!email || !password){
             return alert('Email and password are required')
         }
@@ -13,7 +19,8 @@ export default function Register() {
             return alert('Password missmatch')
         }
 
-        //TODO: Register User
+        // Register User
+        onRegister(email)
 
         //TODO: Redirect to home page 
         
@@ -27,6 +34,7 @@ export default function Register() {
                     <div className="container">
                         <div className="brand-logo" />
                         <h1>Register</h1>
+                        {user && <h2>You are already registered with {user.email}</h2>}
                         <label htmlFor="email">Email:</label>
                         <input 
                             type="email" 

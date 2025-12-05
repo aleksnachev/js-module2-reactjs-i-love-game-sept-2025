@@ -1,15 +1,13 @@
 import { useNavigate } from "react-router"
+import useForm from "../../hooks/useForm.js"
 
 export default function Register({
     onRegister,
 }) {
     const navigate = useNavigate()
 
-    const registerSubmit = (formData) => {
-        const email = formData.get('email')
-        const password = formData.get('password')
-        const confirmPassword = formData.get('confirm-password')
-
+    const registerHandler = (values) => {
+        const {email,password, confirmPassword} = values
         //Validation
         if (!email || !password) {
             return alert('Email and password are required')
@@ -30,9 +28,15 @@ export default function Register({
         }
     }
 
+    const {formAction, changeHandler, values} = useForm(registerHandler, {
+        email: '',
+        password: '',
+        confirmPassword: ''
+    })
+
     return (
         <section id="register-page" className="content auth">
-            <form id="register" action={registerSubmit}>
+            <form id="register" action={formAction}>
                 <div className="container">
                     <div className="brand-logo" />
                     <h1>Register</h1>
@@ -42,6 +46,8 @@ export default function Register({
                         id="email"
                         name="email"
                         placeholder="Your Email"
+                        onChange={changeHandler}
+                        value={values.email}
                     />
                     <label htmlFor="pass">Password:</label>
                     <input
@@ -49,13 +55,17 @@ export default function Register({
                         name="password"
                         id="register-password"
                         placeholder="Password"
+                        onChange={changeHandler}
+                        value={values.password}
                     />
                     <label htmlFor="con-pass">Confirm Password:</label>
                     <input
                         type="password"
-                        name="confirm-password"
+                        name="confirmPassword"
                         id="confirm-password"
                         placeholder="Repeat Password"
+                        onChange={changeHandler}
+                        value={values.confirmPassword}
                     />
                     <input className="btn submit" type="submit" defaultValue="Register" />
                 </div>

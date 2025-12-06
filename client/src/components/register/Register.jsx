@@ -28,7 +28,7 @@ export default function Register({
         }
     }
 
-    const {formAction, changeHandler, values} = useForm(registerHandler, {
+    const {register, formAction} = useForm(registerHandler, {
         email: '',
         password: '',
         confirmPassword: ''
@@ -44,28 +44,23 @@ export default function Register({
                     <input
                         type="email"
                         id="email"
-                        name="email"
                         placeholder="Your Email"
-                        onChange={changeHandler}
-                        value={values.email}
+                        {...register('email')}
                     />
                     <label htmlFor="pass">Password:</label>
                     <input
                         type="password"
-                        name="password"
                         id="register-password"
                         placeholder="Password"
-                        onChange={changeHandler}
-                        value={values.password}
+                        {...register('password')}
                     />
                     <label htmlFor="con-pass">Confirm Password:</label>
-                    <input
+                    <input 
                         type="password"
-                        name="confirmPassword"
                         id="confirm-password"
                         placeholder="Repeat Password"
-                        onChange={changeHandler}
-                        value={values.confirmPassword}
+                        {...register('confirmPassword')}
+
                     />
                     <input className="btn submit" type="submit" defaultValue="Register" />
                 </div>

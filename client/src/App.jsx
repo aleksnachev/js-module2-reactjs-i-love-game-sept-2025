@@ -11,7 +11,7 @@ import Login from "./components/login/Login.jsx"
 import Logout from "./components/logout/Logout.jsx"
 import Edit from "./components/edit/Edit.jsx"
 import UserContext from "./contexts/UserContext.js"
-import useRequest from "./hooks/useFetch.js"
+import useRequest from "./hooks/useRequest.js"
 
 function App() {
     const [user,setUser] = useState(null)
@@ -32,8 +32,9 @@ function App() {
         setUser(result)
     }
 
-    const logoutHandler = () => {
-        setUser(null)
+    const logoutHandler =  () => {
+        return request('/users/logout')
+            .finally(() => setUser(null))
     }
 
     const userContextValues = {
@@ -57,7 +58,7 @@ function App() {
                     <Route path = "/games/:gameId/edit" element = {<Edit/>}/>
                     <Route path = "/register" element = {<Register/>}/>
                     <Route path = "/login" element = {<Login/>}/>
-                    <Route path = "/logout" element = {<Logout onLogout={logoutHandler }/>}/>
+                    <Route path = "/logout" element = {<Logout/>}/>
 
 
                 </Routes>

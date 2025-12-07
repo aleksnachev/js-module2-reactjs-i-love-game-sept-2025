@@ -34,7 +34,7 @@ function App() {
 
     const logoutHandler =  () => {
         return request('/users/logout')
-            .finally(() => setUser(null))
+            .finally(() => setUser(null)) 
     }
 
     const userContextValues = {

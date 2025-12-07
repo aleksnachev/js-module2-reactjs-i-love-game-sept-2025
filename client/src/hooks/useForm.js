@@ -22,10 +22,10 @@ export default function useForm(callback, initialValues){
         })
       }
 
-      return(
+      return{
         register,
         values,
         changeHandler,
         formAction
-      )
+      }
 }

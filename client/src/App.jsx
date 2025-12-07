@@ -12,25 +12,28 @@ import Logout from "./components/logout/Logout.jsx"
 import Edit from "./components/edit/Edit.jsx"
 
 function App() {
-    const [registeredUsers,setRegisteredUsers] = useState([])
     const [user,setUser] = useState(null)
 
-    const registerHandler = (email, password) => {
-        if (registeredUsers.some(user => user.email === email)){
-            throw new Error('Email already exists!')
-        }
+    const registerHandler = async (email, password) => {
         const newUser = {email,password}
-        setRegisteredUsers((state) => [...state, newUser])
+
+        //Register API Call
+        const response = await fetch('http://localhost:3030/users/register', {
+            method:'POST',
+            headers:{
+                'content-type':'application/json'
+            },
+            body: JSON.stringify(newUser)
+        })
+        const result = await response.json()
+        console.log(result);
+        
         //Login user after register
         setUser(newUser)
     }
 
     const loginHandler = (email,password) => {
-        const user = registeredUsers.find(u => u.email === email && u.password === password)
-        if (!user){
-            throw new Error('Invalid email or password')
-        }
-        setUser(user)
+
     }
 
     const logoutHandler = () => {

@@ -11,30 +11,25 @@ import Login from "./components/login/Login.jsx"
 import Logout from "./components/logout/Logout.jsx"
 import Edit from "./components/edit/Edit.jsx"
 import UserContext from "./contexts/UserContext.js"
+import useRequest from "./hooks/useFetch.js"
 
 function App() {
     const [user,setUser] = useState(null)
+    const {request} = useRequest()
 
     const registerHandler = async (email, password) => {
         const newUser = {email,password}
 
         //Register API Call
-        const response = await fetch('http://localhost:3030/users/register', {
-            method:'POST',
-            headers:{
-                'content-type':'application/json'
-            },
-            body: JSON.stringify(newUser)
-        })
-        const result = await response.json()
-        console.log(result);
+        const result = await request('/users/register', 'POST', newUser)
         
         //Login user after register
-        setUser(newUser)
+        setUser(result)
     }
 
-    const loginHandler = (email,password) => {
-
+    const loginHandler = async (email,password) => {
+        const result = await request('/users/login', 'POST', {email,password})
+        setUser(result)
     }
 
     const logoutHandler = () => {
@@ -61,7 +56,7 @@ function App() {
                     <Route path = "/games/create" element = {<GameCreate/>}/>
                     <Route path = "/games/:gameId/edit" element = {<Edit/>}/>
                     <Route path = "/register" element = {<Register/>}/>
-                    <Route path = "/login" element = {<Login onLogin={loginHandler }/>}/>
+                    <Route path = "/login" element = {<Login/>}/>
                     <Route path = "/logout" element = {<Logout onLogout={logoutHandler }/>}/>
 
 

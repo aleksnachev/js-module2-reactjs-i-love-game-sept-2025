@@ -1,20 +1,27 @@
-import { useEffect, useState } from "react"
+// import { useEffect, useState } from "react"
 import { useParams } from "react-router"
-import request from "../../../utils/request.js"
+// import request from "../../../utils/request.js"
+import useRequest from "../../../hooks/useRequest.js"
 
-export default function DetailsComments({
-    refresh
-}) {
-    const [comments, setComments] = useState([])
+export default function DetailsComments() {
+    // const [comments, setComments] = useState([])
     const { gameId } = useParams()
+    const urlParams = new URLSearchParams({
+        where: `gameId="${gameId}"`,
+        load:'author=_ownerId:users'
+    })
+    //Ние си измисляме как да се казва (authors)
+    const {data: comments} = useRequest(`/data/comments?${urlParams.toString()}`, [])
+    // useEffect(() => {
+    //     request('/comments')
+    //         .then(result => {
+    //             const gameComments = Object.values(result).filter(comment => comment.gameId === gameId)
+    //             setComments(gameComments)
+    //         })
+    // },[gameId,refresh])
 
-    useEffect(() => {
-        request('/comments')
-            .then(result => {
-                const gameComments = Object.values(result).filter(comment => comment.gameId === gameId)
-                setComments(gameComments)
-            })
-    },[gameId,refresh])
+    // RELATIONS
+
     return (
         <div className="details-comments">
             <h2>Comments:</h2>
@@ -22,7 +29,7 @@ export default function DetailsComments({
                 {comments.map(comment => (
                     <li key={comment._id} className="comment">
                         <p>
-                            {comment.author}: {comment.message}
+                            {comment.author?.email}: {comment.message}
                         </p>
                     </li>
                 ))}

@@ -9,8 +9,6 @@ export default function GameCreate() {
         const  data = values
 
         data.players = Number(data.players)
-        data._createdOn = Date.now()
-
         // const response = await fetch('http://localhost:3030/jsonstore/games', {
         //     method: 'POST',
         //     headers: {

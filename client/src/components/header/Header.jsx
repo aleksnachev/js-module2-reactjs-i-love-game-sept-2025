@@ -1,8 +1,9 @@
 import { Link } from "react-router";
-import { useUserContext } from "../../contexts/UserContext.jsx";
+import { useContext } from "react";
+import UserContext from "../../contexts/UserContext.jsx";
 
 export default function Header() {
-    const { isAuthenticated } = useUserContext()
+    const { isAuthenticated } = useContext(UserContext)
     return (
         <header>
             {/* Navigation */}

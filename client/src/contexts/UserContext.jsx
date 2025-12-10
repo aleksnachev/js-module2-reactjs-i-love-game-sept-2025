@@ -1,5 +1,6 @@
-import { createContext, useState } from "react";
+import { createContext } from "react";
 import useRequest from "../hooks/useRequest.js";
+import usePersistedState from "../hooks/usePersistedState.js";
 
 const UserContext = createContext({
     isAuthenticated: false,
@@ -19,7 +20,7 @@ export function UserProvider({
     children
 }) {
 
-    const [user, setUser] = useState(null)
+    const [user, setUser] = usePersistedState(null)
     const { request } = useRequest()
 
     const registerHandler = async (email, password) => {

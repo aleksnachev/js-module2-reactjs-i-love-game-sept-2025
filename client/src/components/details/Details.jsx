@@ -1,4 +1,4 @@
-import { useContext, useState } from "react"
+import { useContext, useOptimistic } from "react"
 import { Link, useNavigate, useParams } from "react-router"
 import CreateComment from "./create-comment/CreateComment.jsx"
 import DetailsComments from "./details-comments/DetailsComments.jsx"
@@ -6,11 +6,24 @@ import useRequest from "../../hooks/useRequest.js"
 import UserContext from "../../contexts/UserContext.jsx"
 
 export default function Details() {
-    const {isAuthenticated, user} = useContext(UserContext)
-    const navigate= useNavigate()
-    const {gameId} = useParams()
-    const [refresh,setRefresh] = useState(false)
-    const {data: game, request} = useRequest(`/data/games/${gameId}`, [])
+    const { isAuthenticated, user } = useContext(UserContext)
+    const navigate = useNavigate()
+    const { gameId } = useParams()
+    const { data: game, request } = useRequest(`/data/games/${gameId}`, [])
+
+    const urlParams = new URLSearchParams({
+        where: `gameId="${gameId}"`,
+        load: 'author=_ownerId:users'
+    })
+    const { data: comments, setData: setComments } = useRequest(`/data/comments?${urlParams.toString()}`, [])
+    const [optimisticComments, dispatchOptimisticComments] = useOptimistic(comments, (state,action) => {
+        switch(action.type){
+            case 'ADD-COMMENT':
+                return [...state,action.payload]
+            default:
+                return state
+        }
+    })
 
     // useEffect(() => {
     //     fetch(`${baseUrl}/${gameId}`)
@@ -22,21 +35,25 @@ export default function Details() {
     const deleteGameHandler = async () => {
         const isConfirmed = confirm(`Are you sure you want to delete game: ${game.title}`)
 
-        if (!isConfirmed){
+        if (!isConfirmed) {
             return
         }
 
-        try{
+        try {
             await request(`/data/games/${gameId}`, 'DELETE')
 
             navigate('/games')
-        }catch(err){
+        } catch (err) {
             alert('Unable to delete game: ', err.message)
         }
     }
 
-    const refreshHandler = () => {
-        setRefresh(state => !state)
+    const createEndCommentHandler = (createdComment) => {
+        setComments(prevComments => [...prevComments, {...createdComment, author: user}])
+    }   
+
+    const createStartCommmentHandler = (newComment) => {
+        dispatchOptimisticComments({type: 'ADD_COMMENT', payload: {...newComment, author: user, pending:true}})
     }
     return (
         <section id="game-details">
@@ -76,11 +93,11 @@ export default function Details() {
                     {/* <Link to={`/games/${gameId}/delete`} className="button">Delete</Link> */}
                     <button className="button" onClick={deleteGameHandler}>Delete</button>
                 </div>
-                <DetailsComments refresh={refresh}/>
+                <DetailsComments comments={optimisticComments} />
             </div >
             {/* Add Comment ( Only for logged-in users, which is not creators of the current game ) */}
 
-            {isAuthenticated && <CreateComment user={user} onCreate={refreshHandler}/>}
+            {isAuthenticated && <CreateComment user={user} onCreateStart={createStartCommmentHandler} onCreateEnd={createEndCommentHandler} />}
         </section>
 
     )

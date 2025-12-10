@@ -1,17 +1,14 @@
 // import { useEffect, useState } from "react"
-import { useParams } from "react-router"
 // import request from "../../../utils/request.js"
-import useRequest from "../../../hooks/useRequest.js"
 
-export default function DetailsComments() {
+
+export default function DetailsComments({
+    comments
+}) {
     // const [comments, setComments] = useState([])
-    const { gameId } = useParams()
-    const urlParams = new URLSearchParams({
-        where: `gameId="${gameId}"`,
-        load:'author=_ownerId:users'
-    })
+
+
     //Ние си измисляме как да се казва (authors)
-    const {data: comments} = useRequest(`/data/comments?${urlParams.toString()}`, [])
     // useEffect(() => {
     //     request('/comments')
     //         .then(result => {
@@ -27,7 +24,7 @@ export default function DetailsComments() {
             <h2>Comments:</h2>
             <ul>
                 {comments.map(comment => (
-                    <li key={comment._id} className="comment">
+                    <li style={comment.pending ? {color: 'gray'} : {}}key={comment._id} className="comment">
                         <p>
                             {comment.author?.email}: {comment.message}
                         </p>
